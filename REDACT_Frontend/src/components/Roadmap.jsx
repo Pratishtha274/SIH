@@ -6,6 +6,7 @@ import { roadmap } from "../constants";
 import { check2, grid, loading1 } from "../assets";
 import { Gradient } from "./design/Roadmap";
 import { NavLink } from "react-router-dom";
+import { GoArrowRight } from "react-icons/go";
 import { Link } from "react-router-dom";
 
 const Roadmap = () => (
@@ -36,8 +37,7 @@ const Roadmap = () => (
                 </div>
                 <div className="relative z-1 h-[22rem] flex flex-col ">
                   <div className="flex items-center justify-between max-w-[27rem] mb-8 md:mb-20">
-                    {/* <Tagline>{item.date}</Tagline> */}
-                    <Tagline>1</Tagline>
+                    <Tagline>{item.date}</Tagline>
 
                     <div className="flex items-center px-4 py-1 bg-n-1 rounded text-n-8">
                       <img
@@ -52,14 +52,10 @@ const Roadmap = () => (
                   </div>
 
                   <div className="mb-10 -my-10 -mx-15 h-[12rem] flex items-center justify-center">
-                    {/* <img
-                      className="w-full"
-                      src={item.imageUrl}
-                      width={628}
-                      height={426}
-                      alt={item.title}
-                    /> */}
-                   <Link to="/Redact-Video"> yaha pe button rahega jo file format ke liye click karega</Link>
+                    <NavLink to ={item.url}>
+                      <button type="button" className={`text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 
+                        hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-800/80 font-[40px] rounded-xl text-sm px-[1em] py-6 text-center me-2 mb-2 w-[17em] flex items-center justify-center font-bold`}>{item.btn_text}<GoArrowRight className="ml-3 text-2xl"/></button>
+                    </NavLink>
                   </div>
                   <h4 className="h4 mb-4">{item.title}</h4>
                   <p className="body-2 text-n-4">{item.text}</p>

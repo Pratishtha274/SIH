@@ -39,6 +39,7 @@ import {
   telegram,
   twitter,
   yourlogo,
+  TeamLogo2
 } from "../assets";
 
 export const navigation = [
@@ -50,12 +51,12 @@ export const navigation = [
   {
     id: "1",
     title: "Tech Stack",
-    url: "#pricing",
+    url: "#",
   },
   {
     id: "2",
     title: "About Us",
-    url: "#how-to-use",
+    url: "#",
   },
   // {
   //   id: "3",
@@ -65,13 +66,13 @@ export const navigation = [
   {
     id: "4",
     title: "New account",
-    url: "#signup",
+    url: "/get-started",
     onlyMobile: true,
   },
   {
     id: "5",
     title: "Sign",
-    url: "#login",
+    url: "/get-started",
     onlyMobile: true,
   },
 ];
@@ -80,7 +81,7 @@ export const heroIcons = [homeSmile, file02, searchMd, plusSquare];
 
 export const notificationImages = [notification4, notification3, notification2];
 
-export const companyLogos = [yourlogo, yourlogo, yourlogo, yourlogo, yourlogo];
+export const companyLogos = [TeamLogo2, TeamLogo2, TeamLogo2, TeamLogo2, TeamLogo2];
 
 export const brainwaveServices = [
   "Photo generating",
@@ -136,18 +137,22 @@ export const roadmap = [
     id: "0",
     title: "Text Redaction",
     text: "Allows you to upload documents like PDFs, word documents, or images and redact sensitive information.",
-    date: "Dec 2024",
+    date: "1",
     status: "done",
-    imageUrl: roadmap1,
+    url: "/redact-doc",
     colorful: true,
+    color: "red-100",
+    btn_text : "REDACT TEXT"
   },
   {
     id: "1",
     title: "Video Redaction",
     text: "Effortlessly redact faces in videos, ensuring privacy and safeguarding identities with precision.",
-    date: "May 2023",
+    date: "2",
     status: "done",
-    imageUrl: roadmap2,
+    color : "red-200",
+    url: "/Redact-Video",
+    btn_text : "REDACT VIDEO"
   },
   // {  
   //   id: "2",
@@ -295,7 +300,7 @@ export const benefits = [
     text: "Reducing exposure to sensitive information minimizes risks of data breaches, misuse, or unauthorized access.",
     backgroundUrl: "./src/assets/benefits/card-2.svg",
     iconUrl: benefitIcon2,
-    imageUrl: privacy,
+    imageUrl: adhar,
     light: true,
   },
   {
@@ -304,7 +309,7 @@ export const benefits = [
     text: "Tailored redaction rules to detect specific patterns  such as:Classified document labels.Government IDs like AADHAAR or PAN",
     backgroundUrl: "./src/assets/benefits/card-3.svg",
     iconUrl: benefitIcon3,
-    imageUrl: adhar,
+    imageUrl: privacy,
   },
   {
     id: "3",

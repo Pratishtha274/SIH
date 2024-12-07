@@ -87,8 +87,13 @@ import adhar from "./adhar.jpeg"
 import scale from "./scale.jpeg"
 import context from "./context.jpg"
 import scalability from "./scalability.png"
+import TeamLogo from "./TeamLogo.png"
+import TeamLogo2 from "./TeamLogo2.png"
+
 import vidicon from "./video.png"
 export {
+  TeamLogo2,
+  TeamLogo,
   privacy,
   adhar,
   scale,
