@@ -5,9 +5,10 @@ import Tagline from "./Tagline";
 import { roadmap } from "../constants";
 import { check2, grid, loading1 } from "../assets";
 import { Gradient } from "./design/Roadmap";
+import { NavLink } from "react-router-dom";
 
 const Roadmap = () => (
-  <Section className="overflow-hidden" id="roadmap">
+  <Section className="overflow-hidden h-screen" id="roadmap">
     <div className="container md:pb-10">
       <Heading tag="Ready to get started" title="Choose Your File Format" />
 
@@ -32,9 +33,10 @@ const Roadmap = () => (
                     alt="Grid"
                   />
                 </div>
-                <div className="relative z-1">
+                <div className="relative z-1 h-[22rem] flex flex-col ">
                   <div className="flex items-center justify-between max-w-[27rem] mb-8 md:mb-20">
-                    <Tagline>{item.date}</Tagline>
+                    {/* <Tagline>{item.date}</Tagline> */}
+                    <Tagline>1</Tagline>
 
                     <div className="flex items-center px-4 py-1 bg-n-1 rounded text-n-8">
                       <img
@@ -48,14 +50,15 @@ const Roadmap = () => (
                     </div>
                   </div>
 
-                  <div className="mb-10 -my-10 -mx-15">
-                    <img
+                  <div className="mb-10 -my-10 -mx-15 h-[12rem] flex items-center justify-center">
+                    {/* <img
                       className="w-full"
                       src={item.imageUrl}
                       width={628}
                       height={426}
                       alt={item.title}
-                    />
+                    /> */}
+                    yaha pe button rahega jo file format ke liye click karega
                   </div>
                   <h4 className="h4 mb-4">{item.title}</h4>
                   <p className="body-2 text-n-4">{item.text}</p>
@@ -69,7 +72,8 @@ const Roadmap = () => (
       </div>
 
       <div className="flex justify-center mt-12 md:mt-15 xl:mt-20">
-        <Button href="/roadmap">Our roadmap</Button>
+        <NavLink to="/"><Button>BACK TO HOME</Button></NavLink>
+
       </div>
     </div>
   </Section>
