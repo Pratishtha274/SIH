@@ -6,9 +6,10 @@ import { roadmap } from "../constants";
 import { check2, grid, loading1 } from "../assets";
 import { Gradient } from "./design/Roadmap";
 import { NavLink } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const Roadmap = () => (
-  <Section className="overflow-hidden h-screen" id="roadmap">
+  <Section className=" h-screen" id="roadmap">
     <div className="container md:pb-10">
       <Heading tag="Ready to get started" title="Choose Your File Format" />
 
@@ -58,7 +59,7 @@ const Roadmap = () => (
                       height={426}
                       alt={item.title}
                     /> */}
-                    yaha pe button rahega jo file format ke liye click karega
+                   <Link to="/Redact-Video"> yaha pe button rahega jo file format ke liye click karega</Link>
                   </div>
                   <h4 className="h4 mb-4">{item.title}</h4>
                   <p className="body-2 text-n-4">{item.text}</p>
