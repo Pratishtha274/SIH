@@ -181,6 +181,7 @@
 import React, { useState } from "react";
 import Section from './Section'
 import Heading from './Heading'
+import { NavLink } from "react-router-dom";
 
 function Redact_doc() {
   const [file, setFile] = useState(null);
@@ -212,11 +213,8 @@ function Redact_doc() {
   return (
     <>
       <Section className="h-screen" id="roadmap">
-      <Heading tag="Ready baby" title="Document Redaction Tool" text="" />
+      <Heading tag="REDACT YOUR FILE" title="Document Redaction Tool" text="" />
       <div className="bg-[#02000e] text-white flex flex-col items-center justify-center">
-        {/* <h1 className="text-4xl font-extrabold text-center text-gradient mb-10">
-          Document Redaction Tool
-        </h1> */}
 
         <div className="w-full max-w-lg p-8 bg-gray-800 rounded-xl shadow-2xl ">
           <div className="mb-8">
@@ -286,8 +284,10 @@ function Redact_doc() {
               Preview Document
             </button>
           </div>
+
         </div>
       </div>
+      
     </Section>
     </>
   );

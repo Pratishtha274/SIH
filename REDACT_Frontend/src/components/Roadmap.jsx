@@ -7,9 +7,10 @@ import { check2, grid, loading1 } from "../assets";
 import { Gradient } from "./design/Roadmap";
 import { NavLink } from "react-router-dom";
 import { GoArrowRight } from "react-icons/go";
+import { Link } from "react-router-dom";
 
 const Roadmap = () => (
-  <Section className="overflow-hidden h-screen" id="roadmap">
+  <Section className=" h-screen" id="roadmap">
     <div className="container md:pb-10">
       <Heading tag="Ready to get started" title="Choose Your File Format" />
 
@@ -51,8 +52,9 @@ const Roadmap = () => (
                   </div>
 
                   <div className="mb-10 -my-10 -mx-15 h-[12rem] flex items-center justify-center">
-                    <NavLink to ="/redact-doc">
-                      <button type="button" class="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-800/80 font-[40px] rounded-xl text-sm px-10 py-5 text-center me-2 mb-2 w-[15em] flex items-center">REDACT TEXT <GoArrowRight className="ml-2 text-2xl"/></button>
+                    <NavLink to ={item.url}>
+                      <button type="button" className={`text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 
+                        hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-800/80 font-[40px] rounded-xl text-sm px-[1em] py-6 text-center me-2 mb-2 w-[17em] flex items-center justify-center font-bold`}>{item.btn_text}<GoArrowRight className="ml-3 text-2xl"/></button>
                     </NavLink>
                   </div>
                   <h4 className="h4 mb-4">{item.title}</h4>

@@ -90,6 +90,7 @@ import scalability from "./scalability.png"
 import TeamLogo from "./TeamLogo.png"
 import TeamLogo2 from "./TeamLogo2.png"
 
+import vidicon from "./video.png"
 export {
   TeamLogo2,
   TeamLogo,
@@ -98,6 +99,7 @@ export {
   scale,
   context,
   scalability,
+  vidicon,
   giphy2,
   giphy,
   tech,

@@ -138,8 +138,10 @@ export const roadmap = [
     text: "Allows you to upload documents like PDFs, word documents, or images and redact sensitive information.",
     date: "1",
     status: "done",
-    imageUrl: roadmap1,
+    url: "/redact-doc",
     colorful: true,
+    color: "red-100",
+    btn_text : "REDACT TEXT"
   },
   {
     id: "1",
@@ -147,7 +149,9 @@ export const roadmap = [
     text: "Effortlessly redact faces in videos, ensuring privacy and safeguarding identities with precision.",
     date: "2",
     status: "done",
-    imageUrl: roadmap2,
+    color : "red-200",
+    url: "/Redact-Video",
+    btn_text : "REDACT VIDEO"
   },
   // {  
   //   id: "2",
