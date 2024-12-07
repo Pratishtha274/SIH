@@ -87,12 +87,14 @@ import adhar from "./adhar.jpeg"
 import scale from "./scale.jpeg"
 import context from "./context.jpg"
 import scalability from "./scalability.png"
+import vidicon from "./video.png"
 export {
   privacy,
   adhar,
   scale,
   context,
   scalability,
+  vidicon,
   giphy2,
   giphy,
   tech,
