@@ -35,9 +35,11 @@ function Redact_Video() {
         console.log("error aara bhaiiiiiiiiiiiiiiiiiiiiiiii")
         throw new Error('Video upload failed');
       }
+      console.log(response);
 
       const data = await response.json();
-      
+      console.log(data);
+
       // Construct download URL
       const downloadUrl = `http://localhost:5000/download-video/${data.output_video}`;
       
@@ -49,9 +51,35 @@ function Redact_Video() {
     }
   };
 
-  const handleDownload = () => {
+  // const handleDownload = () => {
+  //   if (processedVideoUrl) {
+  //     window.open(processedVideoUrl, '_blank');
+  //   }
+
+  const handleDownload = async () => {
     if (processedVideoUrl) {
-      window.open(processedVideoUrl, '_blank');
+      try {
+        const response = await fetch(`${processedVideoUrl}`, {
+          method: 'GET'
+        });
+  
+        if (!response.ok) {
+          throw new Error('Download failed');
+        }
+  
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.style.display = 'none';
+        a.href = url;
+        a.download = processedVideoUrl;
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+      } catch (error) {
+        console.error('Download error:', error);
+        setUploadStatus('Error downloading video');
+      }
     }
   };
 
