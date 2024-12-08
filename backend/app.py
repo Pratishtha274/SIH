@@ -294,9 +294,29 @@ def download_video(filename):
         logger.error(f"Error downloading video: {str(e)}")
         return jsonify({"error": "Internal server error"}), 500
     
-if __name__ == '__main__':
-    app.run(debug=True)
 
 
 
+# class DocumentProcessor:
+#     def __init__(self):
+#         self.metadata = {}
+#         self.text_objects = []
+#         self.visual_elements = []
+
+#     def extract_metadata(self, image):
+#         height, width, _ = image.shape
+#         self.metadata = {"width": width, "height": height, "pages": 1}
+
+#     def save_results(self, output_path):
+#         grouped_data = {
+#             "metadata": self.metadata,
+#             "text": self.text_objects,
+#             "visual_elements": self.visual_elements,
+#         }
+#         with open(output_path, "w") as file:
+#             json.dump(grouped_data, file, indent=4)
+#         print(f"Results saved to {output_path}")
+#         return grouped_data
+
+# Subclass for image-specific processing
 

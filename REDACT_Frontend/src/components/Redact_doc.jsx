@@ -232,14 +232,15 @@ function Redact_doc() {
     formData.append("gradation", gradation);
 
     try {
-      const response = await fetch("http://localhost:5000/redact", {
+      const response = await fetch("http://localhost:5000/redact-doc", {
         method: "POST",
         body: formData,
       });
 
       if (response.ok) {
         const result = await response.json();
-        alert("Redaction successful!");
+        console.log(result.message);
+        // alert("Redaction successful!");
       } else {
         alert("Failed to redact the document.");
       }
