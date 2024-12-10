@@ -71,8 +71,8 @@ def redact_document():
         processor.reconstruct_pdf(pdf_output_path, "./transparent.png")
 
 
-        return jsonify({"message": "File has been processed and redacted successfully!"}), 200
-        #return send_file(pdf_output_path, as_attachment=True, download_name="redacted_output.pdf")
+        # return jsonify({"message": "File has been processed and redacted successfully!"}), 200
+        return send_file(pdf_output_path, as_attachment=True, download_name="final_output.pdf")
 
     except Exception as e:
         return jsonify({"message": f"Error processing file: {e}"}), 500
