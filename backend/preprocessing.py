@@ -39,7 +39,6 @@ class DocumentProcessor:
             print(f"Results saved to {output_path}")
         return grouped_data
 
-
 # Subclass for image-specific processing
 class ImageProcessor(DocumentProcessor):
     def __init__(self, ocr_language="en"):
@@ -139,10 +138,9 @@ class ImageProcessor(DocumentProcessor):
         original_image = Image.open(original_image_path)
         pdf_width, pdf_height = 595.28, 841.89  # A4 size in points
         scale_factor = min(pdf_width / self.metadata["width"], pdf_height / self.metadata["height"])
-
+        
         pdf = FPDF(unit="pt", format=[pdf_width, pdf_height])
         pdf.add_page()
-
         # Draw visual elements
         for idx, element in enumerate(self.visual_elements):
             bbox = element["bbox"]
@@ -157,13 +155,12 @@ class ImageProcessor(DocumentProcessor):
                         int((bbox[0] + bbox[2]) * self.metadata["width"]),
                         int((bbox[1] + bbox[3]) * self.metadata["height"]))
             cropped = original_image.crop(crop_box)
-            scaled = cropped.resize((int(w), int(h)))
+            scaled = cropped.resize((max(1,int(w)), max(1,int(h))))
 
             temp_path = f"temp_{idx}.png"
             scaled.save(temp_path)
             pdf.image(temp_path, x, y, w, h)
             os.remove(temp_path)
-
         # Draw text
         for text in self.text_objects:
             box = text["coordinates"]
@@ -172,7 +169,7 @@ class ImageProcessor(DocumentProcessor):
             pdf.set_xy(x, y)
             pdf.set_font("Arial", size=text["font_size"])
             pdf.cell(0, 10, text["content"], border=0)
-
+        
         pdf.output(output_pdf_path)
         print(f"PDF saved to {output_pdf_path}")
 
@@ -183,4 +180,4 @@ class ImageProcessor(DocumentProcessor):
 #     processed_image = processor.process_image(r"C:\Users\Swarnim Raj\Desktop\REDACT-TOOL\backend\preview-page0.jpg")
 #     json = processor.save_results("output.json")
 #     print(json)
-#     processor.reconstruct_pdf("output.pdf", "transparent.png")
+    # processor.reconstruct_pdf("output.pdf", "transparent.png")
