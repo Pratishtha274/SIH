@@ -58,12 +58,16 @@ def redact_document():
         redaction_response = send_to_redaction_process(combined_output_path)
 
         # Save the redacted JSON received from the second API
-        redacted_output_path = "output.json"
+        redacted_output_path = "output_redacted.json"
         with open(redacted_output_path, "w") as redacted_file:
             json.dump(redaction_response, redacted_file, indent=4)
 
+        with open(redacted_output_path, "r") as redacted_file:
+            redacted_obj = json.load(redacted_file)
+            
         # Convert the redacted JSON back into a PDF (implementation needed)
         pdf_output_path = "final_output.pdf"
+        processor.text_objects = redacted_obj['text']
         processor.reconstruct_pdf(pdf_output_path, "./transparent.png")
 
 

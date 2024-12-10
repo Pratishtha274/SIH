@@ -1,11 +1,13 @@
 {
     "metadata": {
-        "width": 700,
+        "gradation": "10",
         "height": 990,
-        "pages": 1
+        "pages": 1,
+        "width": 700
     },
     "text": [
         {
+            "content": " QUIZ NIGHT ",
             "coordinates": [
                 [
                     0.15,
@@ -24,10 +26,10 @@
                     0.6121212121212121
                 ]
             ],
-            "content": "QUIZ NIGHT",
             "font_size": 59
         },
         {
+            "content": " MUSIC-GAMES-SURPRISES-FOOD ",
             "coordinates": [
                 [
                     0.16714285714285715,
@@ -46,10 +48,10 @@
                     0.695959595959596
                 ]
             ],
-            "content": "MUSIC-GAMES-SURPRISES-FOOD",
             "font_size": 16
         },
         {
+            "content": " Usually,constellations represent an animal, a person ",
             "coordinates": [
                 [
                     0.14714285714285713,
@@ -68,10 +70,10 @@
                     0.7656565656565657
                 ]
             ],
-            "content": "Usually,constellations represent an animal, a person",
             "font_size": 10
         },
         {
+            "content": " or mythological creature, or an inanimate object. ",
             "coordinates": [
                 [
                     0.17285714285714285,
@@ -90,10 +92,10 @@
                     0.7878787878787878
                 ]
             ],
-            "content": "or mythological creature, or an inanimate object.",
             "font_size": 8
         },
         {
+            "content": " SATURDAY.JANUARY28TH-8PM T0 10PM ",
             "coordinates": [
                 [
                     0.1657142857142857,
@@ -112,10 +114,10 @@
                     0.8606060606060606
                 ]
             ],
-            "content": "SATURDAY.JANUARY28TH-8PM T0 10PM",
             "font_size": 13
         },
         {
+            "content": " 231 269 526 23+ ",
             "coordinates": [
                 [
                     0.19428571428571428,
@@ -134,10 +136,10 @@
                     0.9313131313131313
                 ]
             ],
-            "content": "000 000 000 00+",
             "font_size": 7
         },
         {
+            "content": " @quiznightparty ",
             "coordinates": [
                 [
                     0.6128571428571429,
@@ -156,7 +158,6 @@
                     0.9343434343434344
                 ]
             ],
-            "content": "@quiznightparty",
             "font_size": 10
         }
     ],
