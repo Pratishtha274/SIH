@@ -3,12 +3,8 @@
         "width": 833,
         "height": 1178,
         "pages": 1,
-        "gradation": "default",
-        "custom_tags": [
-            "PHONE_NUMBER",
-            "JOB_TITLE",
-            "PERSON"
-        ]
+        "gradation": "10",
+        "custom_tags": []
     },
     "text": [
         {
