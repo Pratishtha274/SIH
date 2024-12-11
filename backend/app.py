@@ -246,7 +246,7 @@ def redact_video():
         print("we are here1")
         # Process video
         process_video(input_video_path, processed_video_path)
-
+        print("vid process ho gya hai")
         # Merge processed video with original audio
         merge_audio_video(processed_video_path, audio_path, final_output_path)
         print("heheheh123")
@@ -293,30 +293,7 @@ def download_video(filename):
     except Exception as e:
         logger.error(f"Error downloading video: {str(e)}")
         return jsonify({"error": "Internal server error"}), 500
-    
 
-
-
-# class DocumentProcessor:
-#     def __init__(self):
-#         self.metadata = {}
-#         self.text_objects = []
-#         self.visual_elements = []
-
-#     def extract_metadata(self, image):
-#         height, width, _ = image.shape
-#         self.metadata = {"width": width, "height": height, "pages": 1}
-
-#     def save_results(self, output_path):
-#         grouped_data = {
-#             "metadata": self.metadata,
-#             "text": self.text_objects,
-#             "visual_elements": self.visual_elements,
-#         }
-#         with open(output_path, "w") as file:
-#             json.dump(grouped_data, file, indent=4)
-#         print(f"Results saved to {output_path}")
-#         return grouped_data
-
-# Subclass for image-specific processing
+if __name__ == '__main__':
+    app.run(debug=True, port=5000)
 

@@ -29,7 +29,13 @@ def redact_document():
 
     # Get gradation level from the form data
     gradation = request.form.get("gradation", "default")  # Default value if not provided
-
+    custom_gradation = request.form.get("custom_gradation", "[]")
+    try:
+        custom_gradation = json.loads(custom_gradation)  # Convert JSON string to Python list
+    except json.JSONDecodeError:
+        return jsonify({"message": "Invalid custom_gradation format"}), 400
+    
+    
     filename = secure_filename(file.filename)
     file_path = os.path.join(app.config["UPLOAD_FOLDER"], filename)
     file.save(file_path)
@@ -45,13 +51,15 @@ def redact_document():
 
         # Integrate gradation into the metadata of the output data
         output_data['metadata']['gradation'] = gradation
-
+        output_data['metadata']['custom_tags'] = custom_gradation
+        
         # Save the updated data to a new file
         combined_output_path = "combined_output.json"
         with open(combined_output_path, "w") as file:
             json.dump(output_data, file, indent=4)
 
         print(f"Gradation Level: {gradation}")
+        print(f"Custom Tags: {custom_gradation}")
         print(f"Combined output saved to {combined_output_path}")
 
         # Optionally send the updated JSON to a notebook or another endpoint
