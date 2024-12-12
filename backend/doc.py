@@ -87,7 +87,58 @@ def redact_document():
         return jsonify({"message": f"Error processing file: {e}"}), 500
     finally:
         os.remove(file_path)
-        
+import pandas as pd
+import requests
+import re
+from collections import defaultdict
+
+def extract_unique_tokens_and_replace(input_csv, output_csv, service_url):
+    """
+    Process a CSV file to extract unique text tokens, send for replacement, and update the CSV.
+    
+    :param input_csv: Path to the input CSV file.
+    :param output_csv: Path to save the updated CSV file.
+    :param service_url: URL of the service providing replacement mapping.
+    """
+    # Step 1: Read the CSV file
+    df = pd.read_csv(input_csv)
+    
+    # Step 2: Extract all unique text tokens
+    unique_tokens = set()
+    token_to_rows = defaultdict(list)  # Map to track where each token appears
+
+    for col in df.columns:
+        for idx, cell in df[col].items():
+            if pd.notna(cell):  # Ignore NaN cells
+                # Split cell into tokens using regex
+                tokens = re.findall(r'\b\w+\b', str(cell))
+                unique_tokens.update(tokens)
+                for token in tokens:
+                    token_to_rows[token].append((idx, col))  # Track occurrences
+
+    # Step 3: Prepare JSON payload for the service
+    json_payload = {"text": [{"content": token} for token in unique_tokens],"gradation_level" :4}
+
+    # Step 4: Send tokens to the service
+    response = requests.post(service_url, json=json_payload)
+    if response.status_code != 200:
+        raise ValueError(f"Error from service: {response.text}")
+    replacement_map = response.json()  # Expected to be in format {"old_token": "new_token"}
+
+    # Step 5: Replace tokens in the original dataframe
+    for old_token, new_token in replacement_map.items():
+        for idx, col in token_to_rows[old_token]:
+            # Update the cell with the replacement
+            cell_value = df.at[idx, col]
+            df.at[idx, col] = re.sub(rf'\b{old_token}\b', new_token, str(cell_value))
+
+    # Step 6: Save the updated DataFrame to a new CSV file
+    df.to_csv(output_csv, index=False)
+
+# Example usage
+
+
+# extract_unique_tokens_and_replace(, output_csv_path, replacement_service_url)       
 def send_to_redaction_process(json_path):
     """Send the combined JSON data to the redaction API."""
     redaction_url = "http://127.0.0.1:8000/redactionprocess"
@@ -136,40 +187,57 @@ def redact_document_all():
     
         # Check if file type is CSV
     if file_type == "text/csv":
-        try:
-            # Import the CSVProcessor class from your other script
-            from docpreprocessing import CSVProcessor  # Assuming your CSV script is named csv_processor.py
-            
-            # Initialize the processor
-            processor = CSVProcessor()
-            
-            # Split the CSV into chunks
-            print(file_path)
-            processor.split_csv(file_path)
-
-            # Process each chunk remotely
-            endpoint_url = "http://127.0.0.1:8001/redactionprocess-doc"  # Update with your actual endpoint
-            for chunk_file in os.listdir(processor.temp_dir):
-                processor.process_chunk_remote(os.path.join(processor.temp_dir, chunk_file), endpoint_url, gradation)
-            print("donennnnnnn")
-            # Merge processed chunks
-            processed_file_path = os.path.join(OUTPUT_FOLDER2, f"processed_{filename}")
-            processor.merge_chunks(processed_file_path)
-
-            # Clean up temporary files
-            processor.cleanup()
-
-            # Send the processed CSV as the response
-            return send_file(
-                processed_file_path,
-                as_attachment=True,
-                download_name=f"processed_{filename}",
-                mimetype="text/csv",
-            )
-        except Exception as e:
-            print(f"Error processing CSV: {e}")
-            return jsonify({"message": f"Error processing CSV: {e}"}), 500
+        input_csv_path = file_path
+        output_csv_path = "output.csv"
+        replacement_service_url = "http://127.0.0.1:8001/redactionprocess-doc"
+        extract_unique_tokens_and_replace(input_csv_path, output_csv_path, replacement_service_url)
         
+        return send_file(
+            redacted_output_path,
+            as_attachment=True,
+            download_name=f"redacted_{filename}",
+            mimetype=file_mimetype,
+            # headers={
+            #     "Content-Disposition": f"attachment; filename=redacted_{filename}",
+            #     "X-Replacement-Map": json.dumps(replacement_map, indent=4),
+            # },
+        )
+
+        
+    # try:
+    #     # Import the CSVProcessor class from your other script
+    #     from docpreprocessing import CSVProcessor  # Assuming your CSV script is named csv_processor.py
+        
+    #     # Initialize the processor
+    #     processor = CSVProcessor()
+        
+    #     # Split the CSV into chunks
+    #     print(file_path)
+    #     processor.split_csv(file_path)
+
+    #     # Process each chunk remotely
+    #     endpoint_url = "http://127.0.0.1:8001/redactionprocess-doc"  # Update with your actual endpoint
+    #     for chunk_file in os.listdir(processor.temp_dir):
+    #         processor.process_chunk_remote(os.path.join(processor.temp_dir, chunk_file), endpoint_url, gradation)
+    #     print("donennnnnnn")
+    #     # Merge processed chunks
+    #     processed_file_path = os.path.join(OUTPUT_FOLDER2, f"processed_{filename}")
+    #     processor.merge_chunks(processed_file_path)
+
+    #     # Clean up temporary files
+    #     processor.cleanup()
+
+    #     # Send the processed CSV as the response
+    #     return send_file(
+    #         processed_file_path,
+    #         as_attachment=True,
+    #         download_name=f"processed_{filename}",
+    #         mimetype="text/csv",
+    #     )
+    # except Exception as e:
+    #     print(f"Error processing CSV: {e}")
+    #     return jsonify({"message": f"Error processing CSV: {e}"}), 500
+    
         
     # Get replacement map and other options from form data
     replacement_map = request.form.get("replacement_map", "{}")

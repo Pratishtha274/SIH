@@ -83,54 +83,54 @@ function Redact_doc() {
     setFile(null);
   };
 
-  const handleRedact = async () => {
-    if (!file) {
-      alert("Please upload a document first!");
-      return;
-    }
+  // const handleRedact = async () => {
+  //   if (!file) {
+  //     alert("Please upload a document first!");
+  //     return;
+  //   }
 
-    setLoading(true);
+  //   setLoading(true);
 
-    const formData = new FormData();
-    formData.append("file", file);
-    // formData.append("gradation", gradation);
-    console.log(customGradation)
-    if (useCustomGradation) {
-      formData.append("custom_gradation", JSON.stringify(customGradation));
-    } else {
-      formData.append("gradation", gradation);
-    }
-    console.log(formData)
-    try {
-      const response = await fetch("http://localhost:5000/redact-img", {
-        method: "POST",
-        body: formData,
-      });
+  //   const formData = new FormData();
+  //   formData.append("file", file);
+  //   // formData.append("gradation", gradation);
+  //   console.log(customGradation)
+  //   if (useCustomGradation) {
+  //     formData.append("custom_gradation", JSON.stringify(customGradation));
+  //   } else {
+  //     formData.append("gradation", gradation);
+  //   }
+  //   console.log(formData)
+  //   try {
+  //     const response = await fetch("http://localhost:5000/redact-img", {
+  //       method: "POST",
+  //       body: formData,
+  //     });
 
-      if (response.ok) {
-        const blob = await response.blob();
+  //     if (response.ok) {
+  //       const blob = await response.blob();
 
-        // Create a downloadable link
-        const url = window.URL.createObjectURL(blob);
-        const link = document.createElement("a");
-        link.href = url;
-        link.download = "final_output.pdf"; // File name for the downloaded PDF
-        link.click();
+  //       // Create a downloadable link
+  //       const url = window.URL.createObjectURL(blob);
+  //       const link = document.createElement("a");
+  //       link.href = url;
+  //       link.download = "final_output.pdf"; // File name for the downloaded PDF
+  //       link.click();
 
-        // Clean up the object URL
-        window.URL.revokeObjectURL(url);
+  //       // Clean up the object URL
+  //       window.URL.revokeObjectURL(url);
 
-        // alert("Document redacted and downloaded successfully!");
-      } else {
-        alert("Failed to redact the document.");
-      }
-    } catch (error) {
-      const errorData = await response.json();
-      alert(`Failed to redact the document: ${errorData.message}`);
-    } finally {
-      setLoading(false);
-    }
-  };
+  //       // alert("Document redacted and downloaded successfully!");
+  //     } else {
+  //       alert("Failed to redact the document.");
+  //     }
+  //   } catch (error) {
+  //     const errorData = await response.json();
+  //     alert(`Failed to redact the document: ${errorData.message}`);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
   const handleRedact2 = async () => {
     if (!file) {
       alert("Please upload a document first!");
@@ -178,7 +178,8 @@ function Redact_doc() {
         const url = window.URL.createObjectURL(blob);
         const link = document.createElement("a");
         link.href = url;
-        link.download = "final_output.pdf"; // File name for the downloaded PDF
+        // link.download = "final_output.pdf"; // File name for the downloaded PDF
+        link.download = response.file_name || "redacted_output"; // File name for the downloaded PDF
         link.click();
 
         // Clean up the object URL
@@ -317,12 +318,12 @@ function Redact_doc() {
                 )}
               </div>
               <button
-                onClick={handleRedact}
+                onClick={handleRedact2}
                 className={`bg-blue-600 px-4 py-2 rounded-lg text-lg text-white font-semibold hover:bg-blue-500 transition h-[6rem] w-full sm:w-auto ${loading ? "opacity-50 cursor-not-allowed" : ""
                   }`}
                 disabled={loading}
               >
-                {loading ? "Processing and Downloading..." : "Redact IMG and Download"}
+                {loading ? "Processing and Downloading..." : "Redact and Download"}
               </button>
               {/* <button
                 onClick={handleRedact2}

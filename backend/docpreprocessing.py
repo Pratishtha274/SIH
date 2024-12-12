@@ -284,6 +284,7 @@ class CSVProcessor:
         """Write a CSV file with the given headers and rows."""
         with open(file_path, "w", encoding="utf-8", newline="") as file:
             writer = csv.writer(file)
+            # writer.writerow(headers)
             writer.writerows(rows)
 
     
@@ -330,53 +331,27 @@ class CSVProcessor:
         # with open(processed_file_path, "w", encoding="utf-8") as processed_file:
         #     processed_file.write(response)
 
-    # def merge_chunks(self, output_file):
-    #     """Merge processed chunks into a single output CSV file."""
-    #     chunk_files = sorted(
-    #         [os.path.join(self.output_dir, file) for file in os.listdir(self.output_dir) if file.endswith(".csv")]
-    #     )
-    #     merged_rows = []
-
-    #     for chunk_file in chunk_files:
-    #         with open(chunk_file, "r", encoding="utf-8") as file:
-    #             reader = csv.reader(file)
-    #             headers = next(reader)
-    #             merged_rows.extend(reader)
-                
-    #             # if headers is None:
-    #             #     headers = next(reader)  # Read headers from the first chunk
-    #             # else:
-    #             #     next(reader, None)  # Skip headers for subsequent chunks
-    #     print("hiiiiii---------------------")
-    #     print(len(merged_rows))
-    #     self._write_csv(output_file, headers, merged_rows)
     def merge_chunks(self, output_file):
         """Merge processed chunks into a single output CSV file."""
         chunk_files = sorted(
             [os.path.join(self.output_dir, file) for file in os.listdir(self.output_dir) if file.endswith(".csv")]
         )
-        
-        unique_rows = set()  # Use a set to store unique rows.
-        headers = None  # Initialize headers.
-        
+        merged_rows = []
+
         for chunk_file in chunk_files:
             with open(chunk_file, "r", encoding="utf-8") as file:
                 reader = csv.reader(file)
+                headers = next(reader)
+                merged_rows.extend(reader)
                 
-                if headers is None:  # Read headers from the first file.
-                    headers = tuple(next(reader))
-                else:
-                    next(reader, None)  # Skip headers for subsequent files.
-
-                for row in reader:
-                    unique_rows.add(tuple(row))  # Add rows as tuples to the set.
-
-        print("Number of unique rows:", len(unique_rows))
-
-# Convert the set back to a list of rows for writing.
-        merged_rows = list(unique_rows)
-# Write the unique rows to the output file.
+                # if headers is None:
+                #     headers = next(reader)  # Read headers from the first chunk
+                # else:
+                #     next(reader, None)  # Skip headers for subsequent chunks
+        print("hiiiiii---------------------")
+        print(len(merged_rows))
         self._write_csv(output_file, headers, merged_rows)
+
     def cleanup(self):
         """Remove temporary and processed files."""
         import shutil
@@ -413,7 +388,7 @@ class DocumentProcessorFactory:
             return DOCXProcessor(file_path)
         elif ext == ".pptx":
             return PPTXProcessor(file_path)
-        elif ext in [".txt", ".xml"]:
+        elif ext in [".txt",".csv", ".xml"]:
             return TextFileProcessor(file_path)
         elif ext == ".xlsx":
             return XLSXProcessor(file_path)
