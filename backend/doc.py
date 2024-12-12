@@ -77,7 +77,7 @@ def redact_document():
         # Convert the redacted JSON back into a PDF (implementation needed)
         pdf_output_path = "final_output.pdf"
         processor.text_objects = redacted_obj['text']
-        processor.reconstruct_pdf(pdf_output_path, "./transparent.png")
+        processor.reconstruct_pdf(pdf_output_path, "./telea_transparent.png")
 
 
         # return jsonify({"message": "File has been processed and redacted successfully!"}), 200
@@ -93,8 +93,6 @@ def send_to_redaction_process(json_path):
     redaction_url = "http://127.0.0.1:8000/redactionprocess"
     with open(json_path, "rb") as json_file:
         try:
-            print(json_file)
-            print(json_path)
             response = requests.post(redaction_url, files={"file": json_file})
             response.raise_for_status()
             return response.json()  # Assuming the second API returns JSON
@@ -122,12 +120,57 @@ def redact_document_all():
 
     file = request.files["file"]
     gradation = request.form.get("gradation", "default")
-    
+    file_type = file.content_type  # Store the file type
+    print(file_type)
     print(gradation)
     
     if file.filename == "":
         return jsonify({"message": "No selected file"}), 400
 
+    filename = secure_filename(file.filename)
+    file_path = os.path.join(app.config["UPLOAD_FOLDER2"], filename)
+    file.save(file_path)
+    print("#########################")
+    print(file_path)
+
+    
+        # Check if file type is CSV
+    if file_type == "text/csv":
+        try:
+            # Import the CSVProcessor class from your other script
+            from docpreprocessing import CSVProcessor  # Assuming your CSV script is named csv_processor.py
+            
+            # Initialize the processor
+            processor = CSVProcessor()
+            
+            # Split the CSV into chunks
+            print(file_path)
+            processor.split_csv(file_path)
+
+            # Process each chunk remotely
+            endpoint_url = "http://127.0.0.1:8001/redactionprocess-doc"  # Update with your actual endpoint
+            for chunk_file in os.listdir(processor.temp_dir):
+                processor.process_chunk_remote(os.path.join(processor.temp_dir, chunk_file), endpoint_url, gradation)
+            print("donennnnnnn")
+            # Merge processed chunks
+            processed_file_path = os.path.join(OUTPUT_FOLDER2, f"processed_{filename}")
+            processor.merge_chunks(processed_file_path)
+
+            # Clean up temporary files
+            processor.cleanup()
+
+            # Send the processed CSV as the response
+            return send_file(
+                processed_file_path,
+                as_attachment=True,
+                download_name=f"processed_{filename}",
+                mimetype="text/csv",
+            )
+        except Exception as e:
+            print(f"Error processing CSV: {e}")
+            return jsonify({"message": f"Error processing CSV: {e}"}), 500
+        
+        
     # Get replacement map and other options from form data
     replacement_map = request.form.get("replacement_map", "{}")
     try:
@@ -135,21 +178,16 @@ def redact_document_all():
     except json.JSONDecodeError:
         return jsonify({"message": "Invalid replacement_map format"}), 400
 
-    filename = secure_filename(file.filename)
-    file_path = os.path.join(app.config["UPLOAD_FOLDER2"], filename)
-    file.save(file_path)
-    print("#########################")
-    print(file_path)
+    
     try:
         # Process the file using your FileProcessor classes
         processor = DocumentProcessorFactory.create_processor(file_path)
 
         # Extract text from the document
         extracted_text = processor.extract_text()
-        #print("extracted_text hai you seeeeeeeeeeeeee", extracted_text)
 
         # Send extracted text to the redaction API
-        external_api_url = "http://127.0.0.1:8000/redactionprocess-doc"
+        external_api_url = "http://127.0.0.1:8001/redactionprocess-doc"
         payload = {
             "text": extracted_text,
             "gradation_level": gradation
@@ -157,11 +195,10 @@ def redact_document_all():
         try:
             # print(payload)
             response = requests.post(external_api_url, json=payload, headers={"Content-Type": "application/json"})
-            print("HOHHHHHH")
-            print(response)
+
             # response.raise_for_status()
             replacement_map = response.json() if isinstance(response.json(), dict) else {}  # Ensure it's a dict
-            print("hahaha")
+
             
             
             
@@ -172,15 +209,21 @@ def redact_document_all():
         redacted_output_path = os.path.join(OUTPUT_FOLDER2, f"redacted_{filename}")
         print(redacted_output_path)
         processor.replace_text(replacement_map, output_path=redacted_output_path)
-        print("return se pehle")
         print(OUTPUT_FOLDER2)
         # Send reconstructed PDF and response data
+        
         print(redacted_output_path)
+        
+        from mimetypes import guess_type
+
+# Dynamically determine MIME type based on the file extension
+        file_mimetype, _ = guess_type(redacted_output_path)
+        
         return send_file(
             redacted_output_path,
             as_attachment=True,
             download_name=f"redacted_{filename}",
-            mimetype="application/pdf",
+            mimetype=file_mimetype,
             # headers={
             #     "Content-Disposition": f"attachment; filename=redacted_{filename}",
             #     "X-Replacement-Map": json.dumps(replacement_map, indent=4),

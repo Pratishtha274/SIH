@@ -701,8 +701,6 @@ app = Flask(__name__)
 @app.route('/redactionprocess-doc', methods=['POST'])
 def redact():
     try:
-        print("mai yaha huuuuuuuuuuuuu idhr")  # Debugging line to confirm route entry
-
         # Print request headers
         print("Request Headers:", request.headers)
 
@@ -740,4 +738,4 @@ def redact():
       
 if __name__ == '__main__':
     # Run the Flask application on port 8000
-    app.run(host='0.0.0.0', port=8000)
+    app.run(host='0.0.0.0', port=8001)

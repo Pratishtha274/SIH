@@ -142,34 +142,49 @@ function Redact_doc() {
     const formData = new FormData();
     formData.append("file", file);
     // formData.append("gradation", gradation);
-    console.log(customGradation)
+    // console.log(customGradation)
     if (useCustomGradation) {
       formData.append("custom_gradation", JSON.stringify(customGradation));
     } else {
       formData.append("gradation", gradation);
     }
-    console.log(formData)
+
+    const fileType = file.type.split("/")[0]; // Get the type (e.g., "image" or "application")
     try {
-      const response = await fetch("http://localhost:5000/redact-document", {
-        method: "POST",
-        body: formData,
-      });
+      // const response = await fetch("http://localhost:5000/redact-document", {
+      //   method: "POST",
+      //   body: formData,
+      // });
+      let response;
+
+      // Check if the file is an image or other type
+      if (fileType === "image") {
+        response = await fetch("http://localhost:5000/redact-img", {
+          method: "POST",
+          body: formData,
+        });
+      } else {
+        response = await fetch("http://localhost:5000/redact-document", {
+          method: "POST",
+          body: formData,
+        });
+      }
 
       if (response.ok) {
-        
-        // const blob = await response.blob();
 
-        // // Create a downloadable link
-        // const url = window.URL.createObjectURL(blob);
-        // const link = document.createElement("a");
-        // link.href = url;
-        // link.download = "final_output.pdf"; // File name for the downloaded PDF
-        // link.click();
+        const blob = await response.blob();
 
-        // // Clean up the object URL
-        // window.URL.revokeObjectURL(url);
+        // Create a downloadable link
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = "final_output.pdf"; // File name for the downloaded PDF
+        link.click();
 
-        alert("Document redacted and downloaded successfully!");
+        // Clean up the object URL
+        window.URL.revokeObjectURL(url);
+
+        // alert("Document redacted and downloaded successfully!");
       } else {
         alert("Failed to redact the document.");
       }
@@ -195,7 +210,7 @@ function Redact_doc() {
                 Upload your Document
               </label>
               <div className="flex items-center justify-center">
-                <label className="block bg-blue-700 text-white px-15 py-[1.5rem] rounded-lg cursor-pointer hover:bg-blue-600 transition text-center text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center  ">
+                {/* <label className="block bg-blue-700 text-white px-15 py-[1.5rem] rounded-lg cursor-pointer hover:bg-blue-600 transition text-center text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center  ">
                   Choose File - (PNG )
                   <input
                     type="file"
@@ -203,12 +218,12 @@ function Redact_doc() {
                     className="hidden"
                     onChange={handleFileUpload}
                   />
-                </label>
+                </label> */}
                 <label className="ml-4 block bg-green-700 text-white px-15 py-[1.5rem] rounded-lg cursor-pointer hover:bg-blue-600 transition text-center text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center  ">
-                  Choose File - ( PDF, DOCX, XML, CSV, TXT)
+                  Choose File - ( PDF, DOCX, XML, CSV, TXT, PPT)
                   <input
                     type="file"
-                    accept="image/*,application/pdf,.docx,.xml,text/plain,.csv"
+                    accept="image/*,application/pdf,.docx,.xml,text/plain,.csv,.txt,.pptx,.xlsx"
                     className="hidden"
                     onChange={handleFileUpload}
                   />
@@ -301,22 +316,22 @@ function Redact_doc() {
                   </div>
                 )}
               </div>
-              {/* <button
+              <button
                 onClick={handleRedact}
                 className={`bg-blue-600 px-4 py-2 rounded-lg text-lg text-white font-semibold hover:bg-blue-500 transition h-[6rem] w-full sm:w-auto ${loading ? "opacity-50 cursor-not-allowed" : ""
                   }`}
                 disabled={loading}
               >
-                {loading ? "Processing and Downloading..." : "Redact and Download"}
-              </button> */}
-              <button
+                {loading ? "Processing and Downloading..." : "Redact IMG and Download"}
+              </button>
+              {/* <button
                 onClick={handleRedact2}
                 className={`bg-blue-600 px-4 py-2 rounded-lg text-lg text-white font-semibold hover:bg-blue-500 transition h-[6rem] w-full sm:w-auto ${loading ? "opacity-50 cursor-not-allowed" : ""
                   }`}
                 disabled={loading}
               >
-                {loading ? "Processing and Downloading..." : "Redact2  and Download"}
-              </button>
+                {loading ? "Processing and Downloading..." : "Redact DOC and Download"}
+              </button> */}
             </div>
 
           </div>
